@@ -9,10 +9,11 @@ const token = process.env.DISCORD_TOKEN;
 // use to change albums based on calendar events
 const { checkEvent } = require('./events.js');
 
-//Channel ID of the channel you want the bot to work in.
-const designatedChannels = { '261731325055074305': 'botChannel',
-                             '458186960331341824': 'testBotChannel'                            
-                            };
+// channel ID of the channels you want the bot to work in
+// get the channel ID by using client.on('message', message => {console.log(message.channel.id)});
+var designatedChannels = {};
+designatedChannels[process.env.BOT_CHANNEL] = 'botChannel';
+designatedChannels[process.env.TEST_BOT_CHANNEL] = 'testBotChannel';             
 
 // this event will only trigger one time after logging in
 client.once('ready', () => {
@@ -58,10 +59,11 @@ function getImages(discordMessage, album) {
       if (!error && response.statusCode == 200) {
         let info = JSON.parse(body);
         let images = info.data;
-        let image = images.images[Math.floor(Math.random()*128)];
+        let image = images.images[Math.floor(Math.random()*images.images_count)];
         console.log(image)
         // message that is sent back to the channel
-        let replyMessage = `${discordMessage.author.username}'s image is ${image.title} (${image.description}) ${image.link}`;
+        // ex. `${discordMessage.author.username} drew ${image.title} from (${image.description}) ${image.link}`
+        let replyMessage = `${discordMessage.author.username}'s ${process.env.MESSAGE} ${image.title} (${image.description}) ${image.link}`;
   
         discordMessage.channel.send(replyMessage);
       }

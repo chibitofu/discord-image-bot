@@ -1,17 +1,25 @@
 # discord-image-bot
-Install project npm modules
-npm install
+Clone the git repo to your local drive
+$ git clone the-git-repo
 
-* Make sure to add .env file to .gitignore
+Install project npm modules
+$ npm install
+
+* Make sure to add .env file to .gitignore or it will be uploaded to github for everyone to see.
 Create .env file and add your Discord bot token to it.
-ex. ehco "TOKEN=your-discord-token-goes-here" >> .env
+e.g. ehco "TOKEN=your-discord-token-goes-here" >> .env
+Store anything you want to keep private in the .env file.
+e.g. imgur albums, api keys, 
 
 Edit config.json to your needs.
 
-run bot locally using
+Run bot locally using
+(You will need to restart the server to see any changes.)
 node app.js
 
-events.json stores event dates and event albums
+config.json stores any settings or values in one place. Optionally add this to .gitignore to keep these private. 
+
+events.json stores event dates
 
 Discord.js guide - https://discordjs.guide/creating-your-bot
 Discord.js Documentation - https://discord.js.org/#/docs/main/stable/general/welcome
