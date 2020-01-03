@@ -1,4 +1,28 @@
 {
   "prefix": "!",
-  "command": "ping"
+  "command": "ping",
+  "events": {
+    "1": {},
+    "2": { "14": "valentines" },
+    "3": {},
+    "4": {},
+    "5": { "4": "starwars" },
+    "6": {},
+    "7": {},
+    "8": {},
+    "9": {},
+    "10": { "31": "halloween" },
+    "11": { "27": "thanksgiving",
+             "28": "thanksgiving",
+             "29": "thanksgiving",
+             "30": "thanksgiving"},
+    "12": { "24": "christmas",
+             "25": "christmas",
+             "26": "christmas",
+             "27": "christmas",
+             "28": "christmas",
+             "29": "christmas",
+             "30": "christmas",
+             "31": "christmas" }
+  }
 }

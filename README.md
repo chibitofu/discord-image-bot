@@ -2,6 +2,7 @@
 Install project npm modules
 npm install
 
+* Make sure to add .env file to .gitignore
 Create .env file and add your Discord bot token to it.
 ex. ehco "TOKEN=your-discord-token-goes-here" >> .env
 
