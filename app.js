@@ -28,7 +28,7 @@ client.on('message', message => {
 
     if (designatedChannels[message.channel.id]) {
         // prevents infinite bot loops
-        if (!messageContent.startsWith(prefix) || message.author.bot) return;
+        if (!messageContent.startsWith(`${prefix}${command}`) || message.author.bot) return;
 
         if (messageContent.startsWith(`${prefix}${command}`)) {
             let event = checkEvent();
@@ -62,7 +62,7 @@ function getImages(discordMessage, album) {
         let image = images.images[Math.floor(Math.random()*images.images_count)];
         console.log(image)
         // message that is sent back to the channel
-        // ex. `${discordMessage.author.username} drew ${image.title} from (${image.description}) ${image.link}`
+        // e.g. `${discordMessage.author.username} drew ${image.title} from (${image.description}) ${image.link}`
         let replyMessage = `${discordMessage.author.username}'s ${process.env.MESSAGE} ${image.title} (${image.description}) ${image.link}`;
   
         discordMessage.channel.send(replyMessage);

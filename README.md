@@ -11,15 +11,19 @@ e.g. ehco "TOKEN=your-discord-token-goes-here" >> .env
 Store anything you want to keep private in the .env file.
 e.g. imgur albums, api keys, 
 
-Edit config.json to your needs.
-
 Run bot locally using
-(You will need to restart the server to see any changes.)
-node app.js
+$ node app.js
+(Will need to restart the server to see any updates to files. Look up nodemon for automatic server restarts on file changes.)
 
-config.json stores any settings or values in one place. Optionally add this to .gitignore to keep these private. 
+config.json - stores any settings or values in one place. Optionally add this to .gitignore to keep these private.
+Edit config.json as needed.
 
-events.json stores event dates
+events.json - stores event dates
+(Months start at 0 due to Date() formatting)
+
+I use channel ID's to designate where the bot works.
+You can use channel names if the bot will be availible for public use. Have the Discord server admin create or edit a channel in the Discord server to the channel name you designated for the bot.
+Alternatively no channel authentication is required if the bot is to be used in any channel.
 
 Discord.js guide - https://discordjs.guide/creating-your-bot
 Discord.js Documentation - https://discord.js.org/#/docs/main/stable/general/welcome
