@@ -2,14 +2,22 @@
 // check to see if there are any events happening
 module.exports = {
     checkEvent: function() {
-        let eventsData = require('./events.json');
+        const eventsJSON = require('./events.json');
+        let eventAlbums = {  test: undefined,
+                            valentines: process.env.VALENTINES_ALBUM,
+                            starwars: undefined,
+                            halloween: undefined,
+                            thanksgiving: process.env.THANKSGIVING_ALBUM,
+                            christmas: process.env.CHRISTMAS_ALBUM
+                        };
+
         let date = new Date();
         let day = date.getDate().toString();
         let month = date.getMonth().toString();
-        let event = eventsData[month][day];
+        let eventName = eventAlbums[eventsJSON[month][day]];
         
-        if (event) {
-            return eventsData.events[event];
+        if (eventName) {
+            return eventName;
         } else {
             return undefined;
         }

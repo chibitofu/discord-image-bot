@@ -7,7 +7,7 @@ const request = require('request');
 // the token from the Discord bot from .env file
 const token = process.env.DISCORD_TOKEN;
 // use to change albums based on calendar events
-const events = require('./events.js');
+const { checkEvent } = require('./events.js');
 
 //Channel ID of the channel you want the bot to work in.
 const designatedChannels = { '261731325055074305': 'botChannel',
@@ -23,13 +23,15 @@ client.once('ready', () => {
 // string literals require backticks not quotation marks
 client.on('message', message => {
     // listens for a specific word or phrase
+    let messageContent = message.content.toLowerCase();
+
     if (designatedChannels[message.channel.id]) {
         // prevents infinite bot loops
-        if (!message.content.startsWith(prefix) || message.author.bot) return;
+        if (!messageContent.startsWith(prefix) || message.author.bot) return;
 
-        if (message.content.startsWith(`${prefix}${command}`)) {
-            let event = events.checkEvent();
-            let defaultAlbum = 'pmwc4BS';
+        if (messageContent.startsWith(`${prefix}${command}`)) {
+            let event = checkEvent();
+            let defaultAlbum = process.env.DEFAULT_ALBUM;
 
             if (event) {
                 // event albums
@@ -44,9 +46,9 @@ client.on('message', message => {
 });
 
 function getImages(discordMessage, album) {
-    var options = {
+    let options = {
     //url to IMGUR album
-      url: `https://api.imgur.com/3/album/${album}/images`,
+      url: `https://api.imgur.com/3/album/${album}`,
       headers: {
       'Authorization': `Client-ID ${process.env.IMGUR_CLIENT_ID}`
       }
@@ -54,10 +56,12 @@ function getImages(discordMessage, album) {
   
     function callback(error, response, body) {
       if (!error && response.statusCode == 200) {
-        var info = JSON.parse(body);
-        var images = info.data;
-        var image = images[Math.floor(Math.random()*images.length)];
-        var replyMessage = `${discordMessage.author.username}'s image is ${image.title} (${image.description}) ${image.link}`;
+        let info = JSON.parse(body);
+        let images = info.data;
+        let image = images.images[Math.floor(Math.random()*128)];
+        console.log(image)
+        // message that is sent back to the channel
+        let replyMessage = `${discordMessage.author.username}'s image is ${image.title} (${image.description}) ${image.link}`;
   
         discordMessage.channel.send(replyMessage);
       }

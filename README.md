@@ -11,6 +11,8 @@ Edit config.json to your needs.
 run bot locally using
 node app.js
 
+events.json stores event dates and event albums
+
 Discord.js guide - https://discordjs.guide/creating-your-bot
 Discord.js Documentation - https://discord.js.org/#/docs/main/stable/general/welcome
 Discord.js github - https://github.com/discordjs/discord.js
