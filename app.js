@@ -7,7 +7,7 @@ const request = require('request');
 // the token from the Discord bot from .env file
 const token = process.env.DISCORD_TOKEN;
 // use to change albums based on calendar events
-const { checkEvent } = require('./events.js');
+const { checkEvent, addEvent, initializeEventsJson } = require('./events.js');
 
 // channel ID of the channels you want the bot to work in
 // get the channel ID by using client.on('message', message => {console.log(message.channel.id)});
@@ -15,18 +15,36 @@ var designatedChannels = {};
 designatedChannels[process.env.BOT_CHANNEL] = 'botChannel';
 designatedChannels[process.env.TEST_BOT_CHANNEL] = 'testBotChannel';             
 
+// initialize events
+var testInit = async () => {
+    await initializeEventsJson();
+    await addEvent("valentines day");
+    await addEvent("easter");
+    await addEvent("halloween", 6);
+    await addEvent("thanksgiving", 1, 2);
+    await addEvent("christmas", 1, 6);
+}
+
 // this event will only trigger one time after logging in
 client.once('ready', () => {
-  console.log('Image Bot Ready!');
+    testInit();
+    // initializeEventsJson()
+    // addEvent("valentines day");
+    // addEvent("mothers day");
+    // addEvent("easter");
+    // addEvent("fathers day");
+    // addEvent("halloween", 6);
+    // addEvent("thanksgiving", 1, 2);
+    // addEvent("christmas", 1, 6);
+    // addEvent("valentines day")
+    console.log('Image Bot Ready!');
 });
 
 // listens to all messages sent on the Discord server
 // string literals require backticks not quotation marks
 client.on('message', message => {
-    // listens for a specific word or phrase
-    let messageContent = message.content.toLowerCase();
-
     if (designatedChannels[message.channel.id]) {
+        let messageContent = message.content.toLowerCase();
         // prevents infinite bot loops
         if (!messageContent.startsWith(`${prefix}${command}`) || message.author.bot) return;
 

@@ -8,6 +8,7 @@ $ npm install
 * Make sure to add .env file to .gitignore or it will be uploaded to github for everyone to see.
 Create .env file and add your Discord bot token to it.
 e.g. ehco "TOKEN=your-discord-token-goes-here" >> .env
+
 Store anything you want to keep private in the .env file.
 e.g. imgur albums, api keys, 
 

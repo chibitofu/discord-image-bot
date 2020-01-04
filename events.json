@@ -1,24 +1,40 @@
 {
-    "0":  { "3": "test" },
-    "1":  { "14": "valentines" },
-    "2":  {},
-    "3":  {},
-    "4":  { "4": "starwars" },
-    "5":  {},
-    "6":  {},
-    "7":  {},
-    "8":  {},
-    "9":  {  "31": "halloween" },
-    "10": { "27": "thanksgiving",
-            "28": "thanksgiving",
-            "29": "thanksgiving",
-            "30": "thanksgiving"},
-    "11": { "24": "christmas",
-            "25": "christmas",
-            "26": "christmas",
-            "27": "christmas",
-            "28": "christmas",
-            "29": "christmas",
-            "30": "christmas",
-            "31": "christmas" }
+    "0": {
+        "3": "valentines day"
+    },
+    "1": {},
+    "2": {},
+    "3": {
+        "12": "easter"
+    },
+    "4": {},
+    "5": {},
+    "6": {},
+    "7": {},
+    "8": {},
+    "9": {
+        "25": "halloween",
+        "26": "halloween",
+        "27": "halloween",
+        "28": "halloween",
+        "29": "halloween",
+        "30": "halloween",
+        "31": "halloween"
+    },
+    "10": {
+        "25": "thanksgiving",
+        "26": "thanksgiving",
+        "27": "thanksgiving",
+        "28": "thanksgiving"
+    },
+    "11": {
+        "24": "christmas",
+        "25": "christmas",
+        "26": "christmas",
+        "27": "christmas",
+        "28": "christmas",
+        "29": "christmas",
+        "30": "christmas",
+        "31": "christmas"
+    }
 }
