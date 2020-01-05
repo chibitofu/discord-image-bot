@@ -4,12 +4,12 @@ module.exports = {
     checkEvent: function() {
         const eventsJSON = require('./events.json');
         // values are imgur album hashes e.g. GD6p5Fi
-        let eventAlbums = {  test: undefined,
-                            valentines: process.env.VALENTINES_ALBUM,
-                            starwars: undefined,
-                            halloween: undefined,
-                            thanksgiving: process.env.THANKSGIVING_ALBUM,
-                            christmas: process.env.CHRISTMAS_ALBUM
+        let eventAlbums = {  "test": undefined,
+                            "valentines day": process.env.VALENTINES_ALBUM,
+                            "starwars": undefined,
+                            "halloween": undefined,
+                            "thanksgiving": process.env.THANKSGIVING_ALBUM,
+                            "christmas": process.env.CHRISTMAS_ALBUM
                         };
 
         let date = new Date();
@@ -34,7 +34,7 @@ module.exports = {
         var eventsJSON = JSON.parse((await fsPromises.readFile('./events.json')).toString());
         eventName = eventName.toLowerCase();
         var dateArr = [];
-
+        
         if (!eventDate) { eventDate = moment().holiday(eventName); };
 
         var startEvent = new Date(moment(eventDate).subtract(daysBefore, 'days').format('MM-DD-YYYY'));

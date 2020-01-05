@@ -16,9 +16,11 @@ designatedChannels[process.env.BOT_CHANNEL] = 'botChannel';
 designatedChannels[process.env.TEST_BOT_CHANNEL] = 'testBotChannel';             
 
 // initialize events
-var testInit = async () => {
+var eventInit = async () => {
     await initializeEventsJson();
     await addEvent("valentines day");
+    await addEvent("mother's day");
+    await addEvent("father's day");
     await addEvent("easter");
     await addEvent("halloween", 6);
     await addEvent("thanksgiving", 1, 2);
@@ -27,16 +29,7 @@ var testInit = async () => {
 
 // this event will only trigger one time after logging in
 client.once('ready', () => {
-    testInit();
-    // initializeEventsJson()
-    // addEvent("valentines day");
-    // addEvent("mothers day");
-    // addEvent("easter");
-    // addEvent("fathers day");
-    // addEvent("halloween", 6);
-    // addEvent("thanksgiving", 1, 2);
-    // addEvent("christmas", 1, 6);
-    // addEvent("valentines day")
+    eventInit();
     console.log('Image Bot Ready!');
 });
 
@@ -78,7 +71,6 @@ function getImages(discordMessage, album) {
         let info = JSON.parse(body);
         let images = info.data;
         let image = images.images[Math.floor(Math.random()*images.images_count)];
-        console.log(image)
         // message that is sent back to the channel
         // e.g. `${discordMessage.author.username} drew ${image.title} from (${image.description}) ${image.link}`
         let replyMessage = `${discordMessage.author.username}'s ${process.env.MESSAGE} ${image.title} (${image.description}) ${image.link}`;
