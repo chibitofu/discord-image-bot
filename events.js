@@ -4,8 +4,8 @@ module.exports = {
     checkEvent: function() {
         const eventsJSON = require('./events.json');
         // values are imgur album hashes e.g. GD6p5Fi
-        let eventAlbums = {  "test": undefined,
-                            "valentines day": process.env.VALENTINES_ALBUM,
+        let eventAlbums = { "test": process.env.TEST,
+                            "valentine's day": process.env.VALENTINES_ALBUM,
                             "starwars": undefined,
                             "halloween": undefined,
                             "thanksgiving": process.env.THANKSGIVING_ALBUM,

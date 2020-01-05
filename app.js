@@ -18,13 +18,14 @@ designatedChannels[process.env.TEST_BOT_CHANNEL] = 'testBotChannel';
 // initialize events
 var eventInit = async () => {
     await initializeEventsJson();
-    await addEvent("valentines day");
+    await addEvent("valentine's day");
     await addEvent("mother's day");
     await addEvent("father's day");
     await addEvent("easter");
     await addEvent("halloween", 6);
     await addEvent("thanksgiving", 1, 2);
     await addEvent("christmas", 1, 6);
+    await addEvent("test", 1, 2, "2020-01-06");
 }
 
 // this event will only trigger one time after logging in
