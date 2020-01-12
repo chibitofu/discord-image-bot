@@ -1,12 +1,4 @@
 {
   "prefix": "!",
-  "command": "ping",
-  "development": {
-    "databse": "image-bot",
-    "host": "127.0.0.1",
-    "dialect": "postgress"
-  },
-  "production": {
-    "use_env_variable": "DATABSE_URL"
-  }
+  "command": "ping"
 }

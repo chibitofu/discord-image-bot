@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express()
 const bodyParser = require('body-parser');
-const db = require('./models/index')
+const db = require('./controllers/user')
 const { prefix, command } = require('./config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -27,7 +27,6 @@ app.use(
 )
 
 app.get('/', (request, response) => {
-  console.log(request)
   response.json({ info: 'Node.js, Express, and Postgres API' })
 })
 

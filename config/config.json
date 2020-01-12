@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "moon",
+    "password": null,
+    "database": "image_bot",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "moon",
+    "password": null,
+    "database": "image_bot",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "moon",
+    "password": null,
+    "database": "image_bot",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
