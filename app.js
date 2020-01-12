@@ -1,4 +1,8 @@
 require('dotenv').config();
+const express = require('express');
+const app = express()
+const bodyParser = require('body-parser');
+const db = require('./models/index')
 const { prefix, command } = require('./config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -14,6 +18,20 @@ const { checkEvent, addEvent, initializeEventsJson } = require('./events.js');
 var designatedChannels = {};
 designatedChannels[process.env.BOT_CHANNEL] = 'botChannel';
 designatedChannels[process.env.TEST_BOT_CHANNEL] = 'testBotChannel';             
+
+app.use(bodyParser.json())
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+)
+
+app.get('/', (request, response) => {
+  console.log(request)
+  response.json({ info: 'Node.js, Express, and Postgres API' })
+})
+
+app.get('/users', db.getUsers)
 
 // initialize events
 var eventInit = async () => {
@@ -87,3 +105,7 @@ function getImages(discordMessage, album) {
 
 // login to Discord with your app's token
 client.login(token);
+
+app.listen(3000, () => {
+  console.log(`App running.`)
+})
