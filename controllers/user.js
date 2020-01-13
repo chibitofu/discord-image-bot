@@ -1,21 +1,31 @@
-const Client = require('pg').Client;
-const client = new Client({
-    user: 'moon',
-    host: 'localhost',
-    database: 'image_bot',
-    password: '',
-    port: 5432,
-})
+const db = require('../models');
+const Sequelize = require('sequelize')
+const client = new Sequelize(
+    'image_bot', 'moon', '',
+    {
+        host: 'localhost',
+        dialect: 'postgres'
+    }
+)
 
-client.connect();
+client
+    .authenticate()
+    .then(() => {
+        console.log("Connection successful")
+    })
+    .catch(err => {
+        console.err("Unable to connect")
+    })
 
 const getUsers = (request, response) => {
     client.query('SELECT * FROM users ORDER BY id ASC', (err, results) => {
         if (err) {
             throw err
         }
-        console.log(results)
-        response.status(200).json(results.rows)
+        console.log(results.rows)
+        // response.status(200).json(results.rows)
+
+        return results.rows
     })
 }
 
@@ -31,13 +41,17 @@ const getUsersById = (request, response) => {
 }
 
 const createUser = (request, response) => {
-    const { name, email } = request.body
+    // const { name, email } = request.body
+    console.log(request)
+    const discordInfo = request.discordInfo
+    const imageInfo = request.imageInfo
 
-    client.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (err, results) => {
-        if (err) {
-            throw err
-        }
-        response.status(201).send(`User added with ID: ${result.inserId}`)
+    db.user.findOrCreate({where: { discordID: discordInfo.id }, defaults: { name: discordInfo.username, currentImage: imageInfo.link, history: [], discordID: discordInfo.id }})
+    .then(([user, created]) => {
+        console.log(user.get({
+          plain: true
+        }))
+        console.log(created)
     })
 }
 

@@ -94,6 +94,12 @@ function getImages(discordMessage, album) {
         let replyMessage = `${discordMessage.author.username}'s ${process.env.MESSAGE} ${image.title} (${image.description}) ${image.link}`;
   
         discordMessage.channel.send(replyMessage);
+
+        let userInfo = {
+          discordInfo: discordMessage.author,
+          imageInfo: image
+        }
+        db.createUser(userInfo, response);
       }
     };
   
