@@ -11,21 +11,17 @@ const client = new Sequelize(
 client
     .authenticate()
     .then(() => {
-        console.log("Connection successful")
+        console.log("Databse connection successful")
     })
     .catch(err => {
-        console.err("Unable to connect")
+        console.err("Unable to connect to database")
     })
 
-const getUsers = (request, response) => {
-    client.query('SELECT * FROM users ORDER BY id ASC', (err, results) => {
-        if (err) {
-            throw err
-        }
-        console.log(results.rows)
-        // response.status(200).json(results.rows)
+const getUserByDiscordID = async (request, response) => {
+    let userId = BigInt(request.id)
 
-        return results.rows
+    return db.user.findOne({
+        where: { discordID: userId }
     })
 }
 
@@ -40,39 +36,48 @@ const getUsersById = (request, response) => {
     })
 }
 
+// finds or creates a user and updates currentImage and history fields=
 const createUser = (request, response) => {
-    // const { name, email } = request.body
     const discordInfo = request.discordInfo
     const imageInfo = request.imageInfo
+    let history = { [imageInfo.title]: { link: imageInfo.link, count: 1 } }
+    
 
     db.user.findOrCreate({
         where: { discordID: discordInfo.id },
         defaults: { name: discordInfo.username,
                     currentImage: imageInfo.link,
-                    history: [imageInfo.link],
+                    history: JSON.stringify(history),
                     discordID: discordInfo.id 
                 }
         })
     .then(([user, created]) => {
         if (!created) {
-            let currentHistory = user.history;
-            currentHistory.push(imageInfo.link)
+            let currentHistory = JSON.parse(user.history)
+            console.log(currentHistory)
+            if (currentHistory[imageInfo.title]) {
+                currentHistory[imageInfo.title].count += 1
+            } else {
+                currentHistory[imageInfo.title] = {
+                                                    link: imageInfo.link,
+                                                    count: 1
+                                                }
+            }
 
             user.update({
                 currentImage: imageInfo.link,
-                history: currentHistory
+                history: JSON.stringify(currentHistory)
             },
             {
                 where: { discordID: discordInfo.id }
             })
             .then((result) => {
-                console.log(result);
+                return result;
+            })
+            .catch(err => {
+                console.err('Unable to update.')
             })
         }
-        // console.log(user.get({
-        //   plain: true
-        // }))
-        // console.log(created)
     })
 }
 
@@ -102,7 +107,7 @@ const deleteUser = (request, response) => {
 }
 
 module.exports = {
-    getUsers,
+    getUserByDiscordID,
     getUsersById,
     createUser,
     updateUser,

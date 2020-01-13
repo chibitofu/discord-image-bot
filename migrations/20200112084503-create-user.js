@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       history: {
-        type: Sequelize.ARRAY(Sequelize.STRING)
+        type: Sequelize.JSON
       },
       discordID: {
         type: Sequelize.BIGINT

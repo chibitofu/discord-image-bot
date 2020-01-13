@@ -5,24 +5,24 @@ module.exports = {
     return queryInterface.bulkInsert('users', [
       {
       name: 'Nya',
-      currentImage: 'dasfasfas',
-      history: ['test', 'test2', 'test3'],
+      currentImage: 'dasfasfas.com',
+      history: "{\"Ramona\":{\"link\":\"https://i.imgur.com/example.png\",\"count\":0},\"Aqua\":{\"link\":\"https://i.imgur.com/example.jpg\",\"count\":0},\"Mikasa Ackerman\":{\"link\":\"https://i.imgur.com/example.jpg\",\"count\":0}}",
       discordID: 19769139420258304,
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
       name: 'Perseus',
-      currentImage: 'fewsresrw',
-      history: ['test', 'test2', 'test3'],
+      currentImage: 'fewsresrw.com',
+      history: "{\"Ramona\":{\"link\":\"https://i.imgur.com/example.png\",\"count\":0},\"Aqua\":{\"link\":\"https://i.imgur.com/example.jpg\",\"count\":0},\"Mikasa Ackerman\":{\"link\":\"https://i.imgur.com/example.jpg\",\"count\":0}}",
       discordID: 60702139420258304,
       createdAt: new Date(),
       updatedAt: new Date()
     },
     {
       name: 'Menae',
-      currentImage: 'hkdjharw',
-      history: ['test', 'test2', 'test3'],
+      currentImage: 'hkdjharw.com',
+      history: "{\"Ramona\":{\"link\":\"https://i.imgur.com/example.png\",\"count\":0},\"Aqua\":{\"link\":\"https://i.imgur.com/example.jpg\",\"count\":0},\"Mikasa Ackerman\":{\"link\":\"https://i.imgur.com/example.jpg\",\"count\":0}}",
       discordID: 50700919420258304,
       createdAt: new Date(),
       updatedAt: new Date()
