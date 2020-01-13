@@ -42,16 +42,37 @@ const getUsersById = (request, response) => {
 
 const createUser = (request, response) => {
     // const { name, email } = request.body
-    console.log(request)
     const discordInfo = request.discordInfo
     const imageInfo = request.imageInfo
 
-    db.user.findOrCreate({where: { discordID: discordInfo.id }, defaults: { name: discordInfo.username, currentImage: imageInfo.link, history: [], discordID: discordInfo.id }})
+    db.user.findOrCreate({
+        where: { discordID: discordInfo.id },
+        defaults: { name: discordInfo.username,
+                    currentImage: imageInfo.link,
+                    history: [imageInfo.link],
+                    discordID: discordInfo.id 
+                }
+        })
     .then(([user, created]) => {
-        console.log(user.get({
-          plain: true
-        }))
-        console.log(created)
+        if (!created) {
+            let currentHistory = user.history;
+            currentHistory.push(imageInfo.link)
+
+            user.update({
+                currentImage: imageInfo.link,
+                history: currentHistory
+            },
+            {
+                where: { discordID: discordInfo.id }
+            })
+            .then((result) => {
+                console.log(result);
+            })
+        }
+        // console.log(user.get({
+        //   plain: true
+        // }))
+        // console.log(created)
     })
 }
 
