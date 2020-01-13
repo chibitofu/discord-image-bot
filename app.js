@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const app = express()
 const bodyParser = require('body-parser');
-const db = require('./controllers/user')
 const { prefix, command } = require('./config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -10,6 +9,7 @@ const client = new Discord.Client();
 const token = process.env.DISCORD_TOKEN;
 // use to change albums based on calendar events
 const { checkEvent, addEvent, initializeEventsJson } = require('./events.js');
+// channel commands
 const { userHistory, getImages, userTop, userCurrent, helpCommands } = require('./index');
 
 // channel ID of the channels you want the bot to work in
@@ -25,8 +25,9 @@ app.use(
   })
 )
 
+// easy way to check if the server is up
 app.get('/', (request, response) => {
-  response.json({ info: 'Node.js, Express, and Postgres API' })
+  response.json({ info: `${process.env.MESSAGE} bot is up` })
 })
 
 // initialize events
@@ -51,6 +52,7 @@ client.once('ready', () => {
 // listens to all messages sent on the Discord server
 // string literals require backticks not quotation marks
 client.on('message', async message => {
+    // change to true to have the bot work on all channels in the connected server
     if (designatedChannels[message.channel.id]) {
         // parses message and returns first 2 words in an array
         let messageCommands = message.content.toLowerCase().split(' ').slice(0,2);

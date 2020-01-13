@@ -26,11 +26,11 @@ module.exports = {
         let totalDraws = 0
 
         for (const [key, val] of Object.entries(history)) {
-          userHistory.push(`${key} : ${val.count}`)
+          userHistory.push(`${key}`)
           totalDraws += val.count
         }
 
-        let replyMessage = `${message.author.username} drew ${totalDraws} ${process.env.MESSAGE}'s - ${userHistory.join(", ")}`;
+        let replyMessage = `${message.author.username} has drawn ${totalDraws} ${process.env.MESSAGE}'s - ${userHistory.join(", ")}`;
         
         message.channel.send(replyMessage);
     },

@@ -15,7 +15,7 @@ module.exports = {
       name: 'Perseus',
       currentImage: 'fewsresrw.com',
       history: "{\"Ramona\":{\"link\":\"https://i.imgur.com/example.png\",\"count\":0},\"Aqua\":{\"link\":\"https://i.imgur.com/example.jpg\",\"count\":0},\"Mikasa Ackerman\":{\"link\":\"https://i.imgur.com/example.jpg\",\"count\":0}}",
-      discordID: 60702139420258304,
+      discordID: 60702119420258304,
       createdAt: new Date(),
       updatedAt: new Date()
     },
