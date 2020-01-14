@@ -69,20 +69,21 @@ module.exports = {
 
             // only rerolls if all the images haven't been drawn
             if (redisKeys.length < images.images_count) {
-                // rerolls till finds a unique image
+                // rerolls till it finds a unique image
                 while (redisKeys.indexOf(image.link) !== -1) {
                     image = images.images[Math.floor(Math.random()*images.images_count)];
                     redisKeys.push(image.link);
                 }
             }
-        
+            
             redisClient.set(image.link, image.title);
             // exire is in seconds
             redisClient.expire(image.link, 60 * 60 * 24 * 7);
-            redisClient.keys('*', (err, reply) => { 
-                console.log(reply);
-            })
-
+            // tracks if a user has drawn
+            redisClient.hset(message.author.username, 'isTrue', true)
+            // prevents user from drawing till time exires, checked before request()
+            // expire is in seconds
+            redisClient.expire(message.author.username, 60 * 60 * 24)
             redisClient.quit();
 
             let userInfo = {
@@ -103,7 +104,40 @@ module.exports = {
     
             db.createUser(userInfo);
         }
-        request(options, callback);
+
+        
+        let redisClient = redis.createClient(6379, '127.0.0.1');
+            redisClient.on('error', (err) => {
+                throw err
+            })
+        // checks to see if enough time has passed since the users last draw
+        // based on exire time set in setImage()
+        redisClient.hget(message.author.username, 'isTrue', (err, res) => {
+            console.log(res)
+            if (!res) {
+                request(options, callback);
+            } else {
+                redisClient.ttl(message.author.username, (err, res) => {
+                    let ttl = res;
+                    let timer = {timeLeft: 0, unit: ''}
+
+                    if (ttl > 3600) {
+                        timer.timeLeft = parseInt(ttl / 60 / 60)
+                        timer.unit = "hours"
+                    } else if (ttl > 60) {
+                        timer.timeLeft = parseInt(ttl / 60)
+                        timer.unit = "minutes"
+                    } else {
+                        timer.timeLeft = ttl
+                        timer.unit = "seconds"
+                    }
+                            
+                    message.channel.send(`Must wait ${timer.timeLeft} ${timer.unit} before you can draw again.`);
+                });
+            }
+            redisClient.quit();
+        })
+        
       },
       userTop: async (message) => {
         let user = await db.getUserByDiscordID(message.author)

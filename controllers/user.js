@@ -71,9 +71,6 @@ const createUser = (request, response) => {
             {
                 where: { discordID: discordInfo.id }
             })
-            .then((result) => {
-                return result;
-            })
             .catch(err => {
                 console.log('Unable to update.')
             })
