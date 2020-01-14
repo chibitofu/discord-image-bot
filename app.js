@@ -1,8 +1,10 @@
 require('dotenv').config();
 const express = require('express');
-const app = express()
+const app = express();
 const bodyParser = require('body-parser');
-const { prefix, command } = require('./config.json');
+// prefixSymbol and commandString make up the phrase the bot looks for to execute commands ex. !ping
+// botMessage is just a string that can be used to add context to an image ex. Warchief
+const { prefixSymbol, commandString,  botMessage} = require('./config.json');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 // the token from the Discord bot from .env file
@@ -14,7 +16,7 @@ const { userHistory, getImages, userTop, userCurrent, helpCommands } = require('
 
 // channel ID of the channels you want the bot to work in
 // get the channel ID by using client.on('message', message => {console.log(message.channel.id)});
-var designatedChannels = {};
+let designatedChannels = {};
 designatedChannels[process.env.BOT_CHANNEL] = 'botChannel';
 designatedChannels[process.env.TEST_BOT_CHANNEL] = 'testBotChannel';             
 
@@ -26,8 +28,9 @@ app.use(
 )
 
 // easy way to check if the server is up
+// add additional routes for front end functionality
 app.get('/', (request, response) => {
-  response.json({ info: `${process.env.MESSAGE} bot is up` })
+  response.json({ info: `${botMessage} bot is up` })
 })
 
 // initialize events
@@ -46,7 +49,7 @@ var eventInit = async () => {
 // this event will only trigger one time after logging in
 client.once('ready', () => {
     eventInit();
-    console.log('Image Bot Ready!');
+    console.log(`${botMessage} bot is running`);
 });
 
 // listens to all messages sent on the Discord server
@@ -57,9 +60,9 @@ client.on('message', async message => {
         // parses message and returns first 2 words in an array
         let messageCommands = message.content.toLowerCase().split(' ').slice(0,2);
         // prevents infinite bot loops
-        if (!messageCommands[0].startsWith(`${prefix}${command}`) || message.author.bot) return;
+        if (!messageCommands[0].startsWith(`${prefixSymbol}${commandString}`) || message.author.bot) return;
 
-        if (messageCommands[0].startsWith(`${prefix}${command}`)) {
+        if (messageCommands[0].startsWith(`${prefixSymbol}${commandString}`)) {
           switch (messageCommands[1]) {
             case "help":
               helpCommands(message)
@@ -94,5 +97,5 @@ client.on('message', async message => {
 client.login(token);
 
 app.listen(3000, () => {
-  console.log(`App running.`)
+  console.log('Express Running')
 })

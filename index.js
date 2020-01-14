@@ -1,18 +1,19 @@
 const db = require('./controllers/user')
-const { prefix, command } = require('./config.json');
+const { prefixSymbol, commandString, botMessage } = require('./config.json');
+const redis = require('redis');
 
 module.exports = {
     helpCommands: (message) => {
-        let preCom = `${prefix}${command}`
-        let commands = [`__**Help for ${process.env.MESSAGE} bot**__`,
-                        `${preCom} - Draw ${process.env.MESSAGE}`, 
-                        `${preCom} current - Current ${process.env.MESSAGE}`,
-                        `${preCom} history - Get all previous ${process.env.MESSAGE}'s`,
-                        `${preCom} top - Most drawn ${process.env.MESSAGE}'s`,
+        let preCom = `${prefixSymbol}${commandString}`
+        let commands = [`__**Help for ${botMessage} bot**__`,
+                        `${preCom} - Draw ${botMessage}`, 
+                        `${preCom} current - Current ${botMessage}`,
+                        `${preCom} history - Get all previous ${botMessage}'s`,
+                        `${preCom} top - Most drawn ${botMessage}'s`,
                         `${preCom} help - Show commands`,
                         `- Only one draw per day.`,
-                        `- ${process.env.MESSAGE}'s are unique for the week.`,
-                        `- Holiday ${process.env.MESSAGE}'s enabled.`
+                        `- ${botMessage}'s are unique for the week.`,
+                        `- Holiday ${botMessage}'s enabled.`
                      ]
 
         let replyMessage = `${commands.join('\n\n')}`
@@ -30,7 +31,7 @@ module.exports = {
           totalDraws += val.count
         }
 
-        let replyMessage = `${message.author.username} has drawn ${totalDraws} ${process.env.MESSAGE}'s - ${userHistory.join(", ")}`;
+        let replyMessage = `${message.author.username} has drawn ${totalDraws} ${botMessage}'s - ${userHistory.join(", ")}`;
         
         message.channel.send(replyMessage);
     },
@@ -49,28 +50,65 @@ module.exports = {
           if (!error && response.statusCode == 200) {
             let info = JSON.parse(body);
             let images = info.data;
+
+            return setImage(images)
+          }
+        };
+
+        setImage = (images) => {
+            // redis holds images for a week to ensure unique rolls
+            let redisClient = redis.createClient(6379, '127.0.0.1');
+            redisClient.on('error', (err) => {
+                throw err
+            })
             let image = images.images[Math.floor(Math.random()*images.images_count)];
-            // message that is sent back to the channel
-            // e.g. `${discordMessage.author.username} drew ${image.title} from (${image.description}) ${image.link}`
-            let replyMessage = `${message.author.username}'s ${process.env.MESSAGE} is ${image.title} (${image.description}) ${image.link}`;
-      
-            message.channel.send(replyMessage);
-    
+            let redisKeys = [];
+            redisClient.keys('*', (err, result) => {
+                redisKeys = result;
+            })
+
+            // only rerolls if all the images haven't been drawn
+            if (redisKeys.length < images.images_count) {
+                // rerolls till finds a unique image
+                while (redisKeys.indexOf(image.link) !== -1) {
+                    image = images.images[Math.floor(Math.random()*images.images_count)];
+                    redisKeys.push(image.link);
+                }
+            }
+        
+            redisClient.set(image.link, image.title);
+            // exire is in seconds
+            redisClient.expire(image.link, 60 * 60 * 24 * 7);
+            redisClient.keys('*', (err, reply) => { 
+                console.log(reply);
+            })
+
+            redisClient.quit();
+
             let userInfo = {
               discordInfo: message.author,
               imageInfo: image
             }
-    
-            db.createUser(userInfo, response);
-          }
-        };
+            
+            return sendMessage(userInfo)
+        }
+
+        sendMessage = (userInfo) => {
+            let image = userInfo.imageInfo
+            // message that is sent back to the channel
+            // e.g. `${discordMessage.author.username} drew ${image.title} from (${image.description}) ${image.link}`
+            let replyMessage = `${message.author.username}'s ${botMessage} is ${image.title} (${image.description}) ${image.link}`;
       
+            message.channel.send(replyMessage);
+    
+            db.createUser(userInfo);
+        }
         request(options, callback);
       },
       userTop: async (message) => {
         let user = await db.getUserByDiscordID(message.author)
         let history = JSON.parse(user.history);
-        let topDraw = {name: [], count: 0}
+        let topDraw = {name: [], count: 0, link: ''}
         let replyMessage;
 
         for (const [key, val] of Object.entries(history)) {
@@ -79,13 +117,14 @@ module.exports = {
           } else if (val.count > topDraw.count) {
               topDraw.name = [key]
               topDraw.count = val.count
+              topDraw.link = val.link
           }
         }
 
         if (topDraw.name.length > 1) {
-            replyMessage = `${message.author.username} top ${process.env.MESSAGE}'s are ${topDraw.name.join(', ')} at ${topDraw.count}.`;
+            replyMessage = `${message.author.username} top ${botMessage}'s are ${topDraw.name.join(', ')} at ${topDraw.count}.`;
         } else {
-            replyMessage = `${message.author.username} top ${process.env.MESSAGE} is ${topDraw.name.join(', ')} at ${topDraw.count}.`;
+            replyMessage = `${message.author.username} top ${botMessage} is ${topDraw.name.join(', ')} at ${topDraw.count} ${topDraw.link}`;
         }
 
         message.channel.send(replyMessage);
@@ -93,7 +132,7 @@ module.exports = {
       userCurrent: async (message) => {
         let user = await db.getUserByDiscordID(message.author)
         let currentImage = user.currentImage
-        let replyMessage = `${message.author.username} current ${process.env.MESSAGE} is ${currentImage}.`
+        let replyMessage = `${message.author.username} current ${botMessage} is ${currentImage}.`
 
         message.channel.send(replyMessage);
       }

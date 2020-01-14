@@ -1,4 +1,5 @@
 {
-  "prefix": "!",
-  "command": "ping"
+  "prefixSymbol": "!",
+  "commandString": "ping",
+  "botMessage": "Warchief"
 }

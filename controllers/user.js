@@ -54,7 +54,7 @@ const createUser = (request, response) => {
     .then(([user, created]) => {
         if (!created) {
             let currentHistory = JSON.parse(user.history)
-            console.log(currentHistory)
+
             if (currentHistory[imageInfo.title]) {
                 currentHistory[imageInfo.title].count += 1
             } else {
@@ -75,7 +75,7 @@ const createUser = (request, response) => {
                 return result;
             })
             .catch(err => {
-                console.err('Unable to update.')
+                console.log('Unable to update.')
             })
         }
     })
