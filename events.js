@@ -4,7 +4,7 @@ module.exports = {
     checkEvent: function() {
         const eventsJSON = require('./events.json');
         // values are imgur album hashes e.g. GD6p5Fi
-        let eventAlbums = { "test": process.env.TEST,
+        let eventAlbums = { 
                             "valentine's day": process.env.VALENTINES_ALBUM,
                             "starwars": undefined,
                             "halloween": undefined,
@@ -63,7 +63,7 @@ module.exports = {
         var eventsJSON = {"0":{},"1":{},"2":{},"3":{},"4":{},"5":{},"6":{},"7":{},"8":{},"9":{},"10":{},"11":{}};
 
         await fsPromises.writeFile('./events.json', JSON.stringify(eventsJSON, null, 4), function(err) {
-            if (err) throw err + "Problem creating";
+            if (err) throw err + "problem creating";
         });
     }
 }

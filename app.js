@@ -16,7 +16,7 @@ const { userHistory, getImages, userTop, userCurrent, helpCommands } = require('
 
 // channel ID of the channels you want the bot to work in
 // get the channel ID by using client.on('message', message => {console.log(message.channel.id)});
-let designatedChannels = {};
+const designatedChannels = {};
 designatedChannels[process.env.BOT_CHANNEL] = 'botChannel';
 designatedChannels[process.env.TEST_BOT_CHANNEL] = 'testBotChannel';             
 
@@ -34,7 +34,7 @@ app.get('/', (request, response) => {
 })
 
 // initialize events
-var eventInit = async () => {
+const eventInit = async () => {
     await initializeEventsJson();
     await addEvent("valentine's day");
     await addEvent("mother's day");
